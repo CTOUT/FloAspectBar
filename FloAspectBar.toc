@@ -1,10 +1,11 @@
-## Interface: 90205
+## Interface: 30300
 ## Title: FloAspectBar
 ## Author: Floraline
 ## Notes: Add an aspect bar similar to the paladin's aura bar
-## OptionalDeps: 
+## OptionalDeps:
 ## Dependencies:
-## SavedVariables: 
-## SavedVariablesPerCharacter: FLOASPECTBAR_OPTIONS, FLOASPECTBAR_OPTIONS2
+## SavedVariables:
+## SavedVariablesPerCharacter: FLOASPECTBAR_OPTIONS
+diagnostic.lua
 FloLib.xml
 FloAspectBar.xml
