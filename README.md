@@ -12,10 +12,15 @@ A lightweight addon that provides a convenient aspect bar for Hunters, similar t
 
 ## Installation
 
+> **Note:** The repository contains the addon files in a `FloAspectBar` subfolder. Copy the **inner** folder to your AddOns directory.
+
 1. Download the addon
-2. Extract to your `World of Warcraft/Interface/AddOns/` folder
-3. Restart WoW or reload UI (`/reload`)
-4. The aspect bar will appear automatically when you log in as a Hunter
+2. Extract the **inner** `FloAspectBar` folder to your `World of Warcraft/Interface/AddOns/` folder
+3. You should have: `Interface/AddOns/FloAspectBar/FloAspectBar.toc`
+4. Restart WoW or reload UI (`/reload`)
+5. The aspect bar will appear automatically when you log in as a Hunter
+
+For detailed installation instructions, see [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md)
 
 ## Usage
 
