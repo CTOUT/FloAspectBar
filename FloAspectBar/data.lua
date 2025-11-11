@@ -7,7 +7,8 @@ FLO_ASPECT_SPELLS = {
 		{ id = 13161 },
 		{ id = 20043 },
 		{ id = 34074 },
-		{ id = 61846 }
+		{ id = 61846 },
+		{ id = 1143165 }  -- Defense of the Turtle (Ascension custom spell)
 	}
 };
 
