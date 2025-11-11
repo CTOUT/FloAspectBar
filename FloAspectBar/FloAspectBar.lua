@@ -28,18 +28,15 @@ function FloAspectBar_OnLoad(self)
 	local temp, classFileName = UnitClass("player");
 	classFileName = strupper(classFileName);
 
-	-- Project Ascension compatibility: Use hardcoded spell list as fallback,
-	-- but we'll dynamically scan for aspects later
-	local classSpells = FLO_ASPECT_SPELLS[classFileName];
-	
-	-- For Project Ascension: Always allow setup for HUNTER class
-	-- We'll discover actual aspects dynamically from the stance bar
-	if classFileName ~= "HUNTER" and classSpells == nil then
+	-- For Project Ascension: Only support HUNTER class
+	-- We use dynamic spell discovery exclusively for compatibility
+	if classFileName ~= "HUNTER" then
 		return;
 	end
 
-	-- Initialize with empty table if no hardcoded spells
-	self.availableSpells = classSpells or {};
+	-- Project Ascension compatibility: Use dynamic discovery only
+	-- No hardcoded spell list - discover aspects from stance bar and spellbook
+	self.availableSpells = {};  -- Start empty, populate dynamically
 	self.useDynamicDiscovery = true; -- Flag to use dynamic spell discovery
 
 	self.spells = {};

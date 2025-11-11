@@ -71,32 +71,10 @@ function FloBarDiagnostic()
     end
     DEFAULT_CHAT_FRAME:AddMessage("Total Traps Found: " .. #foundTraps, 0, 1, 0)
     
-    -- Check if hardcoded Hunter aspects are known (old method)
-    DEFAULT_CHAT_FRAME:AddMessage("--- Hardcoded Spell IDs (Old Method) ---", 1, 1, 0)
-    local aspectSpells = {
-        {id = 13163, name = "Aspect of the Monkey"},
-        {id = 13165, name = "Aspect of the Hawk"},
-        {id = 5118, name = "Aspect of the Cheetah"},
-        {id = 13159, name = "Aspect of the Pack"},
-        {id = 13161, name = "Aspect of the Beast"},
-        {id = 20043, name = "Aspect of the Wild"},
-        {id = 34074, name = "Aspect of the Viper"},
-        {id = 61846, name = "Aspect of the Dragonhawk"},
-        {id = 1143165, name = "Defense of the Turtle (Ascension)"}
-    }
-    
-    local knownCount = 0
-    for _, spell in ipairs(aspectSpells) do
-        local spellName = GetSpellInfo(spell.id)
-        local isKnown = IsSpellKnown(spell.id)
-        if isKnown then
-            DEFAULT_CHAT_FRAME:AddMessage("  [KNOWN] " .. spell.id .. ": " .. (spellName or "Unknown"), 0, 1, 0)
-            knownCount = knownCount + 1
-        else
-            DEFAULT_CHAT_FRAME:AddMessage("  [NOT KNOWN] " .. spell.id .. ": " .. (spellName or "Unknown"), 0.5, 0.5, 0.5)
-        end
-    end
-    DEFAULT_CHAT_FRAME:AddMessage("Total Known (Hardcoded): " .. knownCount, 1, 1, 0)
+    -- Check if hardcoded Hunter aspects are known (DEPRECATED - Dynamic discovery only)
+    DEFAULT_CHAT_FRAME:AddMessage("--- Hardcoded Spell IDs (DEPRECATED - Using Dynamic Discovery) ---", 1, 1, 0)
+    DEFAULT_CHAT_FRAME:AddMessage("  Hardcoded spell list has been removed in favor of dynamic discovery", 0.8, 0.8, 0.8)
+    DEFAULT_CHAT_FRAME:AddMessage("  This provides better compatibility with Project Ascension's custom spells", 0.8, 0.8, 0.8)
     
     -- Test the scanning function directly
     DEFAULT_CHAT_FRAME:AddMessage("--- Testing FloLib_ScanShapeshiftBar() ---", 1, 1, 0)
