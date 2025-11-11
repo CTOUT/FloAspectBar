@@ -33,8 +33,8 @@ function FloBarDiagnostic()
     local i = 1
     local spellName, spellRank = GetSpellName(i, BOOKTYPE_SPELL)
     while spellName do
-        -- Look for spells with "Aspect" or "Aura" in the name
-        if string.find(string.lower(spellName), "aspect") or string.find(string.lower(spellName), "aura") then
+        -- Look for spells with "Aspect", "Aura", "Defense" in the name (to catch Defense of the Turtle)
+        if string.find(string.lower(spellName), "aspect") or string.find(string.lower(spellName), "aura") or string.find(string.lower(spellName), "defense") then
             local isPassive = IsPassiveSpell(i, BOOKTYPE_SPELL)
             if isPassive then
                 DEFAULT_CHAT_FRAME:AddMessage("  [PASSIVE - SKIPPED] [" .. i .. "] " .. spellName, 0.5, 0.5, 0.5)
@@ -81,7 +81,8 @@ function FloBarDiagnostic()
         {id = 13161, name = "Aspect of the Beast"},
         {id = 20043, name = "Aspect of the Wild"},
         {id = 34074, name = "Aspect of the Viper"},
-        {id = 61846, name = "Aspect of the Dragonhawk"}
+        {id = 61846, name = "Aspect of the Dragonhawk"},
+        {id = 1143165, name = "Defense of the Turtle (Ascension)"}
     }
     
     local knownCount = 0
