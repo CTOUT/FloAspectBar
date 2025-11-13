@@ -5,6 +5,9 @@ if not FLOLIB_VERSION or FLOLIB_VERSION < 1.25 then
 local NUM_SPELL_SLOTS = 10;
 FLOLIB_VERSION = 1.25;
 
+-- Search pattern for aspect-like spells (includes Defense of the Turtle)
+local ASPECT_SEARCH_PATTERN = "aspect|aura|stance|seal|presence|defense";
+
 FLOLIB_ACTIVATE_SPEC_1 = GetSpellInfo(63645);
 FLOLIB_ACTIVATE_SPEC_2 = GetSpellInfo(63644);
 
@@ -204,10 +207,10 @@ end
 
 -- Dynamically scan player's spellbook for aspects/auras/traps
 -- This works with any spell IDs and client language (Project Ascension compatible)
--- Pass searchPattern to customize what to look for (default is aspects/auras)
+-- Pass searchPattern to customize what to look for (default is aspects/auras/defense)
 function FloLib_ScanShapeshiftBar(searchPattern)
 	local forms = {};
-	searchPattern = searchPattern or "aspect|aura|stance|seal|presence";
+	searchPattern = searchPattern or ASPECT_SEARCH_PATTERN;
 	
 	-- First, try the stance bar (works for retail WoW)
 	local numForms = GetNumShapeshiftForms();
@@ -323,7 +326,7 @@ function FloLib_Setup(self)
 	-- Project Ascension: Dynamic spell discovery from stance/shapeshift bar
 	if self.useDynamicDiscovery then
 		-- Determine search pattern based on bar type
-		local searchPattern = "aspect|aura|stance|seal|presence";
+		local searchPattern = ASPECT_SEARCH_PATTERN;
 		if self.totemtype == "TRAP" then
 			searchPattern = "trap";
 		elseif self.totemtype == "EARTH" or self.totemtype == "FIRE" or 
@@ -333,8 +336,10 @@ function FloLib_Setup(self)
 		
 		self.availableSpells = FloLib_ScanShapeshiftBar(searchPattern);
 		if #self.availableSpells == 0 then
-			-- No aspects/stances/traps found, hide the bar
-			if not InCombatLockdown() then
+			-- No aspects/stances/traps found
+			-- Don't hide the bar on initial load - spellbook might not be ready yet
+			-- Only hide if we've already successfully shown it before (numSpells was > 0)
+			if not InCombatLockdown() and self.hasBeenSetup then
 				self:Hide();
 			end
 			return;
@@ -443,6 +448,8 @@ function FloLib_Setup(self)
 			end
 			self:Show();
 			self:SetWidth(numSpells * 35 + 12 + timerOffset);
+			-- Mark that we've successfully set up the bar at least once
+			self.hasBeenSetup = true;
 
 			for i=1, NUM_SPELL_SLOTS do
 
