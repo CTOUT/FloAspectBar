@@ -9,6 +9,8 @@ local VERSION = "3.3.0.16"
 -------------------------------------------------------------------------------
 
 local SHOW_WELCOME = true;
+-- Debug toggle (use `/fab debug` to toggle at runtime)
+local FLOASPECTBAR_DEBUG = false;
 local FLOASPECTBAR_BARSETTINGS_DEFAULT = { position = "auto", buttonsOrder = {}, color = { 0, 0.49, 0, 0.7 }, hiddenSpells = {} };
 local FLOASPECTBAR_OPTIONS_DEFAULT = { [1] = { scale = 1, borders = true, barSettings = FLOASPECTBAR_BARSETTINGS_DEFAULT }, active = 1 };
 FLOASPECTBAR_OPTIONS = FLOASPECTBAR_OPTIONS_DEFAULT;
@@ -69,12 +71,18 @@ end
 function FloAspectBar_OnEvent(self, event, ...)
 
 	if event == "PLAYER_ENTERING_WORLD" or event == "LEARNED_SPELL_IN_TAB" then
-		FloLib_Setup(self);
+		if not changingSpec then
+			if FLOASPECTBAR_DEBUG then DEFAULT_CHAT_FRAME:AddMessage("FloAspectBar: FloLib_Setup called on event "..event.." for "..(self and self:GetName() or "nil")); end
+			FloLib_Setup(self);
+		else
+			if FLOASPECTBAR_DEBUG then DEFAULT_CHAT_FRAME:AddMessage("FloAspectBar: Skipping setup because changingSpec=true on event "..event.." for "..(self and self:GetName() or "nil")); end
+		end
 
 	elseif event == "VARIABLES_LOADED" then
 
 		FloAspectBar_MigrateVars();
 		FloAspectBar_CheckTalentGroup(FLOASPECTBAR_OPTIONS.active);
+		if FLOASPECTBAR_DEBUG then DEFAULT_CHAT_FRAME:AddMessage("FloAspectBar: VARIABLES_LOADED - active spec "..tostring(FLOASPECTBAR_OPTIONS.active)); end
 
 		-- Hook the UIParent_ManageFramePositions function
 		hooksecurefunc("UIParent_ManageFramePositions", FloAspectBar_UpdatePosition);
@@ -191,6 +199,11 @@ function FloAspectBar_ReadCmd(line)
 		FloAspectBar_SetBorders(false);
 	elseif cmd == "panic" or cmd == "reset" then
 		FloLib_ResetAddon("FloAspectBar");
+	elseif cmd == "debug" then
+		FLOASPECTBAR_DEBUG = not FLOASPECTBAR_DEBUG;
+		DEFAULT_CHAT_FRAME:AddMessage("FloAspectBar: Debug " .. (FLOASPECTBAR_DEBUG and "enabled" or "disabled"));
+	elseif cmd == "posdump" or cmd == "status" then
+		FloLib_DumpPositions({ "FloAspectBar" });
 	else
 		DEFAULT_CHAT_FRAME:AddMessage( "FloAspectBar usage :" );
 		DEFAULT_CHAT_FRAME:AddMessage( "/fab lock|unlock : lock/unlock position" );
@@ -198,6 +211,8 @@ function FloAspectBar_ReadCmd(line)
 		DEFAULT_CHAT_FRAME:AddMessage( "/fab auto : Automatic positioning" );
 		DEFAULT_CHAT_FRAME:AddMessage( "/fab scale <num> : Set scale" );
 		DEFAULT_CHAT_FRAME:AddMessage( "/fab panic||reset : Reset FloAspectBar" );
+		DEFAULT_CHAT_FRAME:AddMessage( "/fab debug : Toggle debug messages" );
+		DEFAULT_CHAT_FRAME:AddMessage( "/fab posdump|status : Dump position/status to chat" );
 		return;
 	end
 end

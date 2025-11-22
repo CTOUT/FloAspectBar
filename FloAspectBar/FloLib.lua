@@ -718,4 +718,29 @@ function FloLib_BarDropDown_Show(self, button)
 	CloseDropDownMenus();
 end
 
+-- Dump positions/status of frames to chat for debugging (shared helper)
+function FloLib_DumpPositions(bars)
+    for _, name in ipairs(bars) do
+        local bar = _G[name];
+        if not bar then
+            DEFAULT_CHAT_FRAME:AddMessage(name..": (nil)");
+        else
+            local vis = bar:IsVisible() and "visible" or "hidden";
+            local pos = (bar.settings and bar.settings.position) or "nil";
+            local refPoint = "nil";
+            if bar.settings and bar.settings.refPoint then
+                local parts = {};
+                for i=1, #bar.settings.refPoint do
+                    parts[#parts+1] = tostring(bar.settings.refPoint[i]);
+                end
+                refPoint = table.concat(parts, ", ");
+            end
+            local p,a,rp,ox,oy = bar:GetPoint();
+            local anchorName = (a and a.GetName and a:GetName()) or tostring(a);
+            local anchor = tostring(p).." -> "..tostring(anchorName).." "..tostring(rp).." ox="..tostring(ox).." oy="..tostring(oy);
+            DEFAULT_CHAT_FRAME:AddMessage(string.format("%s: %s | settings.position=%s | settings.refPoint=%s | GetPoint=%s", name, vis, tostring(pos), refPoint, anchor));
+        end
+    end
+end
+
 end
